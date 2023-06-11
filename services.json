@@ -1,5 +1,5 @@
 {
 	"googlechat.space.id": "<space_id>",
 	"googlechat.space.webhook.key": "<webhook_key>",
-	"sac.fetch.time": 5
+	"global.fetch.time": 5
 }
