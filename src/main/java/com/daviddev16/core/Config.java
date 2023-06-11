@@ -23,6 +23,10 @@ public final class Config {
 		return (E) configMap.get(nonNull(key, "key"));
 	}
 	
+	public static void set(String key, Object value) {
+		configMap.put(nonNull(key, "key"), nonNull(value, "value"));
+	}
+	
 	public static void initialize(String configFileName) throws IOException {
 		try {
 			FileReader fileReader = new FileReader(nonNull(configFileName, "configFileName"));

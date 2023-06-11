@@ -5,11 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.daviddev16.core.Check;
 import com.daviddev16.core.Config;
+import com.daviddev16.core.GoogleIntegrationService;
 import com.daviddev16.core.IntegrationStatusObserver;
 import com.daviddev16.core.MonitorAPI;
 import com.daviddev16.nf.Estado;
@@ -20,6 +26,9 @@ import com.daviddev16.nf.StatusObserver;
 public class MainApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainApplication.class);
+	
+	private static final String SPACE_ID_OPTION = "space-id";
+	private static final String WEBHOOK_KEY_OPTION = "webhook-key";
 	
 	public static void main(String[] args) {
 
@@ -33,9 +42,44 @@ public class MainApplication {
 					+ "                                                                                         \n\n");
 			LOG.info("Iniciando configurações.");
 			
-			Config.initialize("./internal_services.json");
+			Config.initialize("./services.json");
+			
+			if (args.length > 0) {
+			
+				LOG.info("Foi detectado o uso de argumentos na aplicação, os valores passados como argumento serão usados.");
+			
+				DefaultParser parser = new DefaultParser();
+				Options options = new Options();
+				
+				options.addOption(Option.builder()
+						.longOpt(SPACE_ID_OPTION)
+						.desc("O id do espaço no Google Chat")
+						.required(true)
+						.hasArg(true)
+						.build());
+			
+				options.addOption(Option.builder()
+						.longOpt(WEBHOOK_KEY_OPTION)
+						.desc("A chave do webhook do espaço no Google Chat")
+						.required(true)
+						.hasArg(true)
+						.build());
+				
+				final CommandLine commandLine = parser.parse(options, args);
+				
+				String spaceId = commandLine.getOptionValue(SPACE_ID_OPTION);
+				String webhookKey = commandLine.getOptionValue(WEBHOOK_KEY_OPTION);
+				
+				Config.set(GoogleIntegrationService.GOOGLE_CHAT_SPACE_ID, spaceId);
+				Config.set(GoogleIntegrationService.GOOGLE_CHAT_WEBHOOK_KEY, webhookKey);
+				
+				LOG.info("A chave do webhook e id do espaço foram alterados.");
+				
+			}
+			
 			final double fetchTime = Config.get( Config.GLOBAL_FETCH_TIME );
 			final StatusObserver observer = new IntegrationStatusObserver();
+
 			final Map<EstadoType, Estado> estados = new HashMap<>();
 
 			LOG.info("Iniciando ciclos de atualização.");
@@ -64,14 +108,16 @@ public class MainApplication {
 					
 					});
 				}
+				
 				Thread.sleep(TimeUnit.MINUTES.toMillis((long)fetchTime));
 			}
 			
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException | InterruptedException | ParseException e) {
 			LOG.info("Ciclo interrompido.");
 			LOG.error(e.getMessage(), e);
 			Runtime.getRuntime().exit(-1);
 		}
 	}
+	
 
 }
