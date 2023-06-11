@@ -1,4 +1,5 @@
 {
-	"googlechat.space.id": "AAAAZsgiBHc",
-	"googlechat.space.webhook.key": "AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=hljRzgDv5Hu5zoL2_1uVPpXbqFBrya-5mphA7tUHiQU"
+	"googlechat.space.id": "<space_id>",
+	"googlechat.space.webhook.key": "<webhook_key>",
+	"sac.fetch.time": 5
 }
