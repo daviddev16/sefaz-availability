@@ -13,6 +13,7 @@ O sistema espera o período de tempo configurado no campo ``global.fetch.time`` 
 A informação da key do webhook e o id do espaço do Google Chat pode ser informado de 2 jeitos:
 - Através do arquvido ``services.json`` nos campos ``googlechat.space.id`` e ``googlechat.space.webhook.key``.
 - Através dos parametros ``space-id=<space_id>`` e ``webhook-key=<webhook_key>`` na linha de comando quando for feita a execução do programa.
+  - ``java -jar disponibilidade-sefaz-0.0.1-SNAPSHOT.jar --space-id=ABEAZseiBGE --webhook-key=AIzaSyDdI0hCZtE6vySjMm...``
 
 # Ambiente
 
