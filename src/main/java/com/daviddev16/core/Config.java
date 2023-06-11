@@ -33,7 +33,7 @@ public final class Config {
 			configMap = new Gson().fromJson(fileReader, Map.class);
 		} catch (Exception e) {
 			throw new IOException(String.format("Houve um erro na leitura "
-					+ "do arquivo de configuração \"%s\".", configFileName));
+					+ "do arquivo de configuração \"%s\".", configFileName), e);
 		}
 	}
 

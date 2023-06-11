@@ -1,0 +1,15 @@
+com\daviddev16\core\MonitorAPI.class
+com\daviddev16\nf\ModalityException.class
+com\daviddev16\nf\NFModality.class
+com\daviddev16\nf\StatusObserver.class
+com\daviddev16\nf\Estado.class
+com\daviddev16\nf\NFModalityStatus$Builder.class
+com\daviddev16\MainApplication.class
+com\daviddev16\nf\NfModalityStatusAdapter.class
+com\daviddev16\core\Config.class
+com\daviddev16\nf\EstadoType.class
+com\daviddev16\nf\NFModalityStatus.class
+com\daviddev16\core\GoogleChatWebhookIntegration.class
+com\daviddev16\core\Check.class
+com\daviddev16\core\IntegrationStatusObserver.class
+com\daviddev16\core\GoogleIntegrationService.class

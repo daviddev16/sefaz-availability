@@ -29,6 +29,7 @@ public class MainApplication {
 	
 	private static final String SPACE_ID_OPTION = "space-id";
 	private static final String WEBHOOK_KEY_OPTION = "webhook-key";
+	private static final String FETCH_TIME_OPTION = "fetch-time";
 	
 	public static void main(String[] args) {
 
@@ -41,8 +42,6 @@ public class MainApplication {
 					+ "/____/_____/_/   /_/  |_/____/   /____//_/ /_/  |_/_/  \\____//____/   /_(_)____(_)____/  \r\n"
 					+ "                                                                                         \n\n");
 			LOG.info("Iniciando configurações.");
-			
-			Config.initialize("./services.json");
 			
 			if (args.length > 0) {
 			
@@ -65,19 +64,32 @@ public class MainApplication {
 						.hasArg(true)
 						.build());
 				
+				options.addOption(Option.builder()
+						.longOpt(FETCH_TIME_OPTION)
+						.desc("Tempo de atualização/busca na API")
+						.type(Number.class)
+						.required(true)
+						.hasArg(true)
+						.build());
+				
 				final CommandLine commandLine = parser.parse(options, args);
 				
 				String spaceId = commandLine.getOptionValue(SPACE_ID_OPTION);
 				String webhookKey = commandLine.getOptionValue(WEBHOOK_KEY_OPTION);
+				Number fetchTime = ((Number)commandLine.getParsedOptionValue(FETCH_TIME_OPTION));
 				
 				Config.set(GoogleIntegrationService.GOOGLE_CHAT_SPACE_ID, spaceId);
 				Config.set(GoogleIntegrationService.GOOGLE_CHAT_WEBHOOK_KEY, webhookKey);
+				Config.set(Config.GLOBAL_FETCH_TIME, fetchTime);
+				
 				
 				LOG.info("A chave do webhook e id do espaço foram alterados.");
 				
+			} else {
+				Config.initialize("./services.json");
 			}
 			
-			final double fetchTime = Config.get( Config.GLOBAL_FETCH_TIME );
+			final Number fetchTime = Config.get( Config.GLOBAL_FETCH_TIME );
 			final StatusObserver observer = new IntegrationStatusObserver();
 
 			final Map<EstadoType, Estado> estados = new HashMap<>();
