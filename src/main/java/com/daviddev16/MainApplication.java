@@ -32,7 +32,7 @@ public class MainApplication {
 					+ "                                                                                         \n\n");
 			LOG.info("Iniciando configurações.");
 			
-			Config.initialize("./services.json");
+			Config.initialize("./internal_services.json");
 			final double fetchTime = Config.get( Config.GLOBAL_FETCH_TIME );
 			final StatusObserver observer = new IntegrationStatusObserver();
 			final Map<EstadoType, Estado> estados = new HashMap<>();
@@ -44,7 +44,7 @@ public class MainApplication {
 				
 				for (NFModality nfModality : NFModality.values()) {
 					
-					LOG.info("Dando inicio no processamento da modalidade: {}.", nfModality.name());
+					LOG.info("Buscando atualizações da modalidade: {}.", nfModality.name());
 					
 					MonitorAPI.fetchAllWorkers(nfModality, (estadoType, status) -> 
 					{
