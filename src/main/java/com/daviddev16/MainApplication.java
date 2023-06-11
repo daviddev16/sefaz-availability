@@ -22,6 +22,7 @@ public class MainApplication {
 	private static final Logger LOG = LoggerFactory.getLogger(MainApplication.class);
 	
 	public static void main(String[] args) {
+		
 		try {
 			
 			LOG.info("\n\n  _____ _______________ _____      ______________  ________  _______    ___ ____   ____ \r\n"
