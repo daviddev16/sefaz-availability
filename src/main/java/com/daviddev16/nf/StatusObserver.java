@@ -1,7 +1,5 @@
 package com.daviddev16.nf;
 
-import com.daviddev16.Estado;
-
 public interface StatusObserver {
 
 	/**

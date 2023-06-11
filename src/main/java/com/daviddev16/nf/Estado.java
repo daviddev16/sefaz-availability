@@ -1,33 +1,29 @@
-package com.daviddev16;
+package com.daviddev16.nf;
 
-import com.daviddev16.nf.EstadoType;
-import com.daviddev16.nf.ModalityException;
-import com.daviddev16.nf.NFModality;
-import com.daviddev16.nf.NFModalityStatus;
-import com.daviddev16.nf.NfModalityStatusAdapter;
-import com.daviddev16.nf.StatusObserver;
+import com.daviddev16.core.Check;
 
 public final class Estado extends NfModalityStatusAdapter {
 
 	private final EstadoType estadoType;
 
 	private StatusObserver statusObserver;
+	
 	private NFModalityStatus nfeStatus;
 	private NFModalityStatus nfceStatus;
 	
-	public Estado(EstadoType estadoType, StatusObserver statusObserver, boolean initialAvailability) {
+	public Estado(EstadoType estadoType, StatusObserver statusObserver) {
 		this.statusObserver = Check.nonNull(statusObserver, "statusObserver");
 		this.estadoType = Check.nonNull(estadoType, "estadoType");
 		
 		this.nfeStatus = NFModalityStatus.create()
 				.nfModality(NFModality.NFE)
-				.initialAvailability(initialAvailability, this, statusObserver)
+				.initialAvailability(true)
 				.getNfStatus();
 		
 		if (estadoType.checkNfCompatibility(NFModality.NFCE))
 			this.nfceStatus = NFModalityStatus.create()
 					.nfModality(NFModality.NFCE)
-					.initialAvailability(initialAvailability, this, statusObserver)
+					.initialAvailability(true)
 					.getNfStatus();
 	}
 	

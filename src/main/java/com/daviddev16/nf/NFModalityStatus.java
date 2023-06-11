@@ -1,7 +1,6 @@
 package com.daviddev16.nf;
 
-import com.daviddev16.Check;
-import com.daviddev16.Estado;
+import com.daviddev16.core.Check;
 
 public final class NFModalityStatus {
 
@@ -41,12 +40,7 @@ public final class NFModalityStatus {
 			nfModalityStatus = new NFModalityStatus(NFModality.NFE, false);
 		}
 
-		public Builder initialAvailability(boolean available, Estado estado, StatusObserver statusObserver) {
-			Check.nonNull(estado, "estado");
-			Check.nonNull(statusObserver, "statusObserver");
-			if (statusObserver.alertUnavailabilityOnStart() && !available) {
-				statusObserver.onStatusChanged(nfModalityStatus.getModality(), estado, false);
-			}
+		public Builder initialAvailability(boolean available) {
 			nfModalityStatus.setAvailable(available);
 			return this;
 		}

@@ -34,12 +34,30 @@ public enum EstadoType {
 	private EstadoType(String displayName) {
 		this.displayName = displayName;
 	}
+	
+	public static EstadoType findByWorkerId(String workerId, NFModality nfModality) {
+		for (EstadoType estadoType : values()) {
+			if (estadoType.asWorkerId(nfModality).equalsIgnoreCase(workerId)) {
+				return estadoType;
+			}
+		}
+		return null;
+	}
 
 	public boolean checkNfCompatibility(NFModality modality) {
 		if ( (this == SC || this == CE) && modality == NFModality.NFCE ) {
 			return false;
 		}
 		return true;
+	}
+
+	/* Esse nome será utilizado para relacionar com o "id_worker" da API do monitor */
+	public String asWorkerId(NFModality nfModality) {
+		return String.format("sefaz_%s_envio_%s", nfModality.name(), this.name());
+	}
+	
+	public String getCustomName() {
+		return String.format("%s - %s", getDisplayName(), name());
 	}
 
 	public String getDisplayName() {
