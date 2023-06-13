@@ -22,9 +22,9 @@ import com.google.gson.JsonObject;
 
 
 public final class MonitorAPI {
-	
-	public static final int MAX_ATTEMPTS = 3;
-	
+
+	public static final int MAX_ATTEMPTS = 5;
+
 	public static final Logger LOG = LoggerFactory.getLogger(MonitorAPI.class);
 
 	public static final String MONITOR_ENDPOINT = "https://monitor.tecnospeed.com.br/monitores?stateStatus=true&doc=";
@@ -34,13 +34,13 @@ public final class MonitorAPI {
 
 	private static void fetchAllWorkers(NFModality nfModality, BiConsumer<EstadoType, Float> statusesConsumer, int attempt) 
 			throws IOException, InterruptedException {
-		
+
 		String nfModalityName = Util.nonNull(nfModality, "nfModality").name();
 		URI apiEndpointUri = URI.create(MONITOR_ENDPOINT + nfModalityName);
 
 		LOG.info("Iniciando busca na API [Dominio: monitor.tecnospeed.com.br] "
 				+ "[Modalidade: {}] [Tentativa: {}/{}].", nfModalityName, attempt, MAX_ATTEMPTS);
-		
+
 		HttpRequest request = HttpRequest.newBuilder(apiEndpointUri)
 				.timeout(Duration.ofMinutes(5))
 				.header("accept", "*/*")
@@ -48,18 +48,18 @@ public final class MonitorAPI {
 				.build();
 
 		HttpResponse<String> response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-		
-		if (response.statusCode() != 200 && attempt < MAX_ATTEMPTS) 
-		{
-			LOG.error("A API retornou o código {}, aguardando 1 segundo para tentar "
-					+ "novamente novamente...", response.statusCode());
-			
-			Thread.sleep(TimeUnit.SECONDS.toMillis(1L));
-			
-			fetchAllWorkers(nfModality, statusesConsumer, attempt + 1);
+
+		if (response.statusCode() != 200) {
+			if (attempt < MAX_ATTEMPTS) {
+				LOG.error("A API retornou o código {}, aguardando 2 segundo para tentar "
+						+ "novamente novamente...", response.statusCode());
+				Thread.sleep(TimeUnit.SECONDS.toMillis(2L));
+				fetchAllWorkers(nfModality, statusesConsumer, attempt + 1);
+			}
 			return;
 		}
-		
+
+		/* DEBUG JSON CONTENT */
 		LOG.debug(response.body());
 		
 		GSON.fromJson(response.body(), JsonArray.class).forEach(jsonElement -> 
@@ -74,7 +74,7 @@ public final class MonitorAPI {
 				statusesConsumer.accept(estadoType, status);
 		});
 	}
-	
+
 	public static void fetchAllWorkers(NFModality nfModality, BiConsumer<EstadoType, Float> statusesConsumer) 
 			throws IOException, InterruptedException {
 		fetchAllWorkers(nfModality, statusesConsumer, 1);
