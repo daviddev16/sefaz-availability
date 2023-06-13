@@ -3,7 +3,7 @@ package com.daviddev16.core;
 public enum NFModality { 
 
 	NFE  ("NFe (Nota Fiscal Eletrônica)"),
-	NFCE ("NFCe (Nota Fiscal Eletrônica)");
+	NFCE ("NFCe (Nota Fiscal de Consumidor Eletrônica)");
 	
 	private String extendedName;
 	
