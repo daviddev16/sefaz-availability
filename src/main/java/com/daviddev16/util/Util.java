@@ -24,4 +24,8 @@ public class Util {
 		return builder.toString();
 	}
 	
+	public static InputStream getResourceAsStream(String name) {
+		return Util.class.getResourceAsStream(name);
+	}
+	
 }

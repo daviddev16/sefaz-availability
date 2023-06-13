@@ -1,0 +1,35 @@
+{
+    "cardsV2": [
+        {
+            "cardId": "543222",
+            "card": {
+                "header": {
+                    "title": "Integração de disponibilidade da SEFAZ",
+                    "subtitle": "Houve um erro no serviço de integração, verificar: ",
+                    "imageUrl": "https://i.imgur.com/FD4PSXy.png",
+                    "imageType": "CIRCLE",
+                    "imageAltText": "Error"
+                },
+                "sections": [
+                    {
+                        "header": "Detalhe",
+                        "collapsible": false,
+                        "uncollapsibleWidgetsCount": 1,
+                        "widgets": [
+                            {
+                                "decoratedText": {
+                                    "text": "Mensagem: <i><font color=\"#ef4444\">${EXCEPTION_MESSAGE}</font></i>"
+                                }
+                            },
+                            {
+                                "decoratedText": {
+                                    "text": "Status: <b>ENCERRADO</b>"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

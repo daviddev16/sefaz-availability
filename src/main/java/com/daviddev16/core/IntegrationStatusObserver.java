@@ -49,11 +49,11 @@ public class IntegrationStatusObserver implements StatusObserver {
 		getGoogleChatSpace().sendJson(bannerCardJson);
 	}
 	
-	protected GoogleChatWebhookIntegration getGoogleChatSpace() {
+	public GoogleChatWebhookIntegration getGoogleChatSpace() {
 		return webhookIntegration;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public boolean alertUnavailabilityOnStart() {
 		return true;
 	}

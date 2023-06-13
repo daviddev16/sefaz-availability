@@ -16,6 +16,7 @@ public final class Config {
 	public static final String GLOBAL_FETCH_TIME = "global.fetch.time";
 	public static final String INTERNAL_BASE_CARD_CONTENT = "internal:base.card.content";
 	public static final String INTERNAL_BANNER_CARD_CONTENT = "internal:banner.card.content";
+	public static final String INTERNAL_ERROR_CARD_CONTENT = "internal:error.card.content";
 	
 	private static Map<String, Object> configMap = Collections.synchronizedMap(new HashMap<>());
 
