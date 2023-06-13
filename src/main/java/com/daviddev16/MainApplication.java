@@ -24,7 +24,7 @@ import com.daviddev16.core.TimeState;
 import com.daviddev16.core.Versioned;
 import com.daviddev16.util.Util;
 
-@Versioned(id = "1.0.0-SNAPSHOT")
+@Versioned(id = "1.0.1-SNAPSHOT")
 public final class MainApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainApplication.class);
