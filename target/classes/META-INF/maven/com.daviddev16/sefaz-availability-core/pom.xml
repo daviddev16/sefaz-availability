@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.daviddev16</groupId>
 	<artifactId>sefaz-availability-core</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>sefaz-availability-core</name>
 	<description>Serviço de integração do Google Chat com a disponibilidade de NFe e NFCe na SEFAZ</description>
 	<properties>
