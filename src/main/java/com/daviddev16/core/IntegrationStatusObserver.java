@@ -1,49 +1,63 @@
 package com.daviddev16.core;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.daviddev16.MainApplication;
+
+import static com.daviddev16.core.Placeholders.*;
 
 public class IntegrationStatusObserver implements StatusObserver {
 
-	private final GoogleIntegrationService integrationService;
-
+	public final static String GOOGLE_CHAT_SPACE_ID = "googlechat.space.id";
+	public final static String GOOGLE_CHAT_WEBHOOK_KEY = "googlechat.space.webhook.key";
+	
+	private final GoogleChatWebhookIntegration webhookIntegration;
+	
 	public IntegrationStatusObserver() {
-		integrationService = new GoogleIntegrationService();
+		String spaceId = Config.get(GOOGLE_CHAT_SPACE_ID);
+		String webhookKey = Config.get(GOOGLE_CHAT_WEBHOOK_KEY);
+		this.webhookIntegration = new GoogleChatWebhookIntegration(spaceId, webhookKey);
 	}
 	
-	/*TODO: TO REIMPLEMENT
 	@Override
-	public void onStatusChanged(NFModality nfModality, Estado estado, TimeState oldState, TimeState newState) {
+	public void onStatusChanged(NFModality nfModality, Estado estado, TimeState oldState, TimeState newState, float statusTime) {
 		
-		StringBuilder messageBuilder = new StringBuilder()
-				.append("```")
-				.append("\n")
-				.append("Tipo: ")
-					.append(nfModality.name() + '\n')
-				.append("Estado:")
-					.append(estado.getEstadoType().getCustomName() + '\n')
-				.append("Status: ")
-					.append((newStatus) ? " ✅ EM FUNCIONAMENTO ✅ \n" : " ⛔ FORA DO AR ⛔ \n")
-				.append("Horário: ")
-					.append(SimpleDateFormat.getInstance().format(new Date()))
-				.append("\n")
-				.append("```")
-					.append("<users/all>\n");	
-		
-		getIntegrationService().sendMessage(messageBuilder.toString());
-	}
-	*/
+		final String baseCardJson = Config.get(Config.INTERNAL_BASE_CARD_CONTENT);
+		EstadoType estadoType = estado.getEstadoType();
 
+		String jsonText = new PlaceholderResolver(baseCardJson)
+				.assign(type(NF_MODALITY, NAME), nfModality.name())
+				.assign(type(NF_MODALITY, EXTENDED), nfModality.getExtendedName())
+				
+				.assign(type(ESTADO, EXTENDED), estadoType.getExtendedName())
+				.assign(type(ESTADO, STATUS_TIME), statusTime)
+				
+				.assign(type(OLD_TIME_STATE, DISPLAY_NAME), oldState.getDisplayName())
+				.assign(type(OLD_TIME_STATE, TEXT_COLOR), oldState.getHexColor())
+				
+				.assign(type(NEW_TIME_STATE, DISPLAY_NAME), newState.getDisplayName())
+				.assign(type(NEW_TIME_STATE, TEXT_COLOR), newState.getHexColor())
+				.assign(type(NEW_TIME_STATE, AVAILABILITY), newState.getAvailability())
+				
+				.assign(type(APPLICATION, VERSION), MainApplication.version())
+				.resolved();
+		
+		 getGoogleChatSpace().sendJson(jsonText);
+	}
+	
+	@Override
+	public void onEnabled() {
+		final String bannerCardJson = Config.get(Config.INTERNAL_BANNER_CARD_CONTENT);
+		getGoogleChatSpace().sendJson(bannerCardJson);
+	}
+	
+	protected GoogleChatWebhookIntegration getGoogleChatSpace() {
+		return webhookIntegration;
+	}
+	
 	@Override
 	public boolean alertUnavailabilityOnStart() {
 		return true;
 	}
 
-	public GoogleIntegrationService getIntegrationService() {
-		return integrationService;
-	}
-
-	@Override
-	public void onStatusChanged(NFModality nfModality, Estado changed, TimeState oldState, TimeState newState) {}
+	
 
 }

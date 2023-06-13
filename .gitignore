@@ -24,6 +24,7 @@
 hs_err_pid*
 replay_pid*
 
+current.log
 internal_services.json
 
 .metadata

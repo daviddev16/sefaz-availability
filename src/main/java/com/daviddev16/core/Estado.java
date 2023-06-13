@@ -1,6 +1,6 @@
 package com.daviddev16.core;
 
-import java.awt.Dialog.ModalExclusionType;
+import static com.daviddev16.util.Util.*;
 
 public final class Estado extends NfModalityStatusAdapter {
 
@@ -12,25 +12,26 @@ public final class Estado extends NfModalityStatusAdapter {
 	private NFModalityStatus nfceStatus;
 	
 	public Estado(EstadoType estadoType, StatusObserver statusObserver) {
-		this.statusObserver = Check.nonNull(statusObserver, "statusObserver");
-		this.estadoType = Check.nonNull(estadoType, "estadoType");
+		this.statusObserver = nonNull(statusObserver, "statusObserver");
+		this.estadoType = nonNull(estadoType, "estadoType");
 		
 		this.nfeStatus = NFModalityStatus.create()
 				.nfModality(NFModality.NFE)
-				.initialTimeState(TimeState.DOWN)
+				.initialTimeState(TimeState.NORMAL)
 				.getNfStatus();
 		
 		if (estadoType.checkNfCompatibility(NFModality.NFCE))
 			this.nfceStatus = NFModalityStatus.create()
 					.nfModality(NFModality.NFCE)
-					.initialTimeState(TimeState.DOWN)
+					.initialTimeState(TimeState.NORMAL)
 					.getNfStatus();
 	}
 	
 	private void changeTimeState(NFModality nfModality, 
-							     TimeState newTimeState) throws ModalityException {
+							     TimeState newTimeState, float statusTime) throws ModalityException {
 
 		NFModalityStatus modalityStatus = getStatusBasedOnModality(nfModality);
+		
 		TimeState oldTimeState = modalityStatus.getTimeState();
 		
 		if (!isModalityCompatible(nfModality))
@@ -38,10 +39,10 @@ public final class Estado extends NfModalityStatusAdapter {
 					+ "para essa região. ", estadoType, nfModality);
 		
 		if (oldTimeState != newTimeState && getStatusObserver() != null)
-			getStatusObserver().onStatusChanged(nfModality, this, oldTimeState, newTimeState);
+			getStatusObserver().onStatusChanged(nfModality, this, oldTimeState, newTimeState, statusTime);
 		
+		modalityStatus.setStatusTime(statusTime);
 		modalityStatus.setTimeState(newTimeState);
-
 	}
 	
 	@Override
@@ -55,8 +56,8 @@ public final class Estado extends NfModalityStatusAdapter {
 	}
 	
 	@Override
-	public void setTimeState(NFModality modality, TimeState newTimeState) {
-		changeTimeState(modality, newTimeState);
+	public void setTimeState(NFModality modality, TimeState newTimeState, float statusTime) {
+		changeTimeState(modality, newTimeState, statusTime);
 	}
 	
 	public StatusObserver getStatusObserver() {

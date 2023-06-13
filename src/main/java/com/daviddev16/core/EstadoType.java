@@ -56,7 +56,7 @@ public enum EstadoType {
 		return String.format("sefaz_%s_envio_%s", nfModality.name(), this.name());
 	}
 	
-	public String getCustomName() {
+	public String getExtendedName() {
 		return String.format("%s - %s", getDisplayName(), name());
 	}
 

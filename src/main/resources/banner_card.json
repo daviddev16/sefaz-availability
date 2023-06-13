@@ -1,0 +1,39 @@
+{
+  "cardsV2": [
+    {
+      "cardId": "4255241",
+      "card": {
+        "header": {
+          "title": "Integração de disponibilidade da SEFAZ",
+          "subtitle": "O serviço de integração foi iniciado e começará a operar.",
+          "imageUrl": "https://www.cte.fazenda.gov.br/portal/imagens/banners_Visite_Nfe_On.png",
+          "imageType": "CIRCLE",
+          "imageAltText": "Alerta"
+        },
+        "sections": [
+          {
+            "header": "Informações",
+            "collapsible": true,
+            "uncollapsibleWidgetsCount": 0,
+            "widgets": [
+              {
+                  "buttonList": {
+                    "buttons": [
+                      {
+                        "text": "Sinta-se livre para colaborar/reportar bugs no GitHub!",
+                        "onClick": {
+                          "openLink": {
+                            "url": "https://github.com/daviddev16/sefaz-availability-core"
+                          }
+                        }
+                      }
+                    ]
+                  }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package com.daviddev16.core;
+package com.daviddev16.api;
 
 import java.io.IOException;
 
@@ -13,6 +13,9 @@ import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.daviddev16.core.EstadoType;
+import com.daviddev16.core.NFModality;
+import com.daviddev16.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,7 +35,7 @@ public final class MonitorAPI {
 	private static void fetchAllWorkers(NFModality nfModality, BiConsumer<EstadoType, Float> statusesConsumer, int attempt) 
 			throws IOException, InterruptedException {
 		
-		String nfModalityName = Check.nonNull(nfModality, "nfModality").name();
+		String nfModalityName = Util.nonNull(nfModality, "nfModality").name();
 		URI apiEndpointUri = URI.create(MONITOR_ENDPOINT + nfModalityName);
 
 		LOG.info("Iniciando busca na API [Dominio: monitor.tecnospeed.com.br] "
@@ -56,6 +59,8 @@ public final class MonitorAPI {
 			fetchAllWorkers(nfModality, statusesConsumer, attempt + 1);
 			return;
 		}
+		
+		LOG.debug(response.body());
 		
 		GSON.fromJson(response.body(), JsonArray.class).forEach(jsonElement -> 
 		{

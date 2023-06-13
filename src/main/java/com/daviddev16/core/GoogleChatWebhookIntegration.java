@@ -1,13 +1,12 @@
 package com.daviddev16.core;
 
-import static com.daviddev16.core.Check.nonNull;
+import static com.daviddev16.util.Util.nonNull;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
-import java.util.Optional;
 
 import com.google.gson.Gson;
 
@@ -24,18 +23,24 @@ public class GoogleChatWebhookIntegration {
 				nonNull(spaceId, "spaceId"), 
 				nonNull(webhookKey, "webhookKey")));
 	}
-
-	public synchronized Optional<String> sendMessage(String message) {
-		String  jsonNessage = GSON.toJson(Map.of("text", nonNull(message, "message")));
+	
+	public HttpResponse<String> sendPlainText(String message) {
+		return internalSend(GSON.toJson(Map.of("text", nonNull(message, "message"))));
+	}
+	
+	public HttpResponse<String> sendJson(String jsonContent) {
+		return internalSend(nonNull(jsonContent, "jsonContent"));
+	}
+	
+	private synchronized HttpResponse<String> internalSend(String jsonContent) {
 		HttpRequest request = HttpRequest.newBuilder(webhookUri)
 				.header("accept", "application/json; charset=UTF-8")
-				.POST(HttpRequest.BodyPublishers.ofString(jsonNessage))
+				.POST(HttpRequest.BodyPublishers.ofString(jsonContent))
 				.build();
 		try {
-			HttpResponse<String> response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-			return Optional.of(response.body());
+			return CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 		} catch (Exception e) {
-			return Optional.empty();
+			return null;
 		}
 	}
 

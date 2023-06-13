@@ -13,18 +13,19 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.daviddev16.core.Check;
+import com.daviddev16.api.MonitorAPI;
 import com.daviddev16.core.Config;
 import com.daviddev16.core.Estado;
 import com.daviddev16.core.EstadoType;
-import com.daviddev16.core.GoogleIntegrationService;
 import com.daviddev16.core.IntegrationStatusObserver;
-import com.daviddev16.core.MonitorAPI;
 import com.daviddev16.core.NFModality;
 import com.daviddev16.core.StatusObserver;
 import com.daviddev16.core.TimeState;
+import com.daviddev16.core.Versioned;
+import com.daviddev16.util.Util;
 
-public class MainApplication {
+@Versioned(id = "1.0.0-SNAPSHOT")
+public final class MainApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainApplication.class);
 	
@@ -79,17 +80,28 @@ public class MainApplication {
 				String webhookKey = commandLine.getOptionValue(WEBHOOK_KEY_OPTION);
 				Number fetchTime = ((Number)commandLine.getParsedOptionValue(FETCH_TIME_OPTION));
 				
-				Config.set(GoogleIntegrationService.GOOGLE_CHAT_SPACE_ID, spaceId);
-				Config.set(GoogleIntegrationService.GOOGLE_CHAT_WEBHOOK_KEY, webhookKey);
+				Config.set(IntegrationStatusObserver.GOOGLE_CHAT_SPACE_ID, spaceId);
+				Config.set(IntegrationStatusObserver.GOOGLE_CHAT_WEBHOOK_KEY, webhookKey);
 				Config.set(Config.GLOBAL_FETCH_TIME, fetchTime);
 				
 				
 				LOG.info("A chave do webhook e id do espaço foram alterados.");
 				
 			} else {
-				Config.initialize("./services.json");
+				Config.initialize("./internal_services.json");
 			}
+
 			
+			LOG.info("Carregando card de apresentação.");
+			String bannerCardJsonContent = Util.read(MainApplication.class.getResourceAsStream("/banner_card.json"));
+			Config.set(Config.INTERNAL_BANNER_CARD_CONTENT, bannerCardJsonContent);
+			
+			LOG.info("Carregando card de template interno.");
+			String cardJsonContent = Util.read(MainApplication.class.getResourceAsStream("/base_card.json"));
+			Config.set(Config.INTERNAL_BASE_CARD_CONTENT, cardJsonContent);
+			
+			
+			LOG.info("Preparando observador e fetch time...");
 			final Number fetchTime = Config.get( Config.GLOBAL_FETCH_TIME );
 			final StatusObserver observer = new IntegrationStatusObserver();
 
@@ -97,14 +109,16 @@ public class MainApplication {
 
 			LOG.info("Iniciando ciclos de atualização.");
 			LOG.info("Fetch time definido para {} minutos.", fetchTime);
+
+			observer.onEnabled();
 			
 			while (true) {
 				
 				for (NFModality nfModality : NFModality.values()) {
 					
-					MonitorAPI.fetchAllWorkers(nfModality, (estadoType, status) -> 
+					MonitorAPI.fetchAllWorkers(nfModality, (estadoType, statusTime) -> 
 					{
-						TimeState timeState = TimeState.getState(status);
+						TimeState timeState = TimeState.getState(statusTime);
 						Estado estado = estados.get(estadoType);
 
 						if (estado == null) {
@@ -112,12 +126,12 @@ public class MainApplication {
 							estados.put(estadoType, estado);
 						}
 						
-						estado.setTimeState(nfModality, timeState);
+						estado.setTimeState(nfModality, timeState, statusTime);
 					
 					});
 				}
 				
-				Thread.sleep(TimeUnit.MINUTES.toMillis((long)fetchTime));
+				Thread.sleep(TimeUnit.MINUTES.toMillis(fetchTime.longValue()));
 			}
 			
 		} catch (IOException | InterruptedException | ParseException e) {
@@ -125,6 +139,11 @@ public class MainApplication {
 			LOG.error(e.getMessage(), e);
 			Runtime.getRuntime().exit(-1);
 		}
+	}
+	
+	public static String version() {
+		Versioned versionedAnn = MainApplication.class.getAnnotation(Versioned.class);
+		return versionedAnn != null ? versionedAnn.id() : "-/-";
 	}
 	
 

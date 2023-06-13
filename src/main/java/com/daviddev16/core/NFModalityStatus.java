@@ -1,13 +1,17 @@
 package com.daviddev16.core;
 
+import com.daviddev16.util.Util;
+
 public final class NFModalityStatus {
 
 	private NFModality modality;
 	private TimeState timeState;
+	private float statusTime;
 
-	private NFModalityStatus(NFModality modality, TimeState timeState) {
+	private NFModalityStatus(NFModality modality, TimeState timeState, float statusTime) {
 		this.modality = modality;
 		this.timeState = timeState;
+		this.statusTime = statusTime;
 	}
 
 	public static NFModalityStatus.Builder create() {
@@ -16,6 +20,10 @@ public final class NFModalityStatus {
 
 	public void setTimeState(TimeState timeState) {
 		this.timeState = timeState;
+	}
+	
+	public void setStatusTime(float statusTime) {
+		this.statusTime = statusTime;
 	}
 	
 	private void setModality(NFModality modality) {
@@ -29,22 +37,31 @@ public final class NFModalityStatus {
 	public TimeState getTimeState() {
 		return timeState;
 	}
+	
+	public float getStatusTime() {
+		return statusTime;
+	}
 
 	public static final class Builder {
 
 		private final NFModalityStatus nfModalityStatus;
 
 		public Builder() {
-			nfModalityStatus = new NFModalityStatus(NFModality.NFE, TimeState.DOWN);
+			nfModalityStatus = new NFModalityStatus(NFModality.NFE, TimeState.DOWN, -1);
 		}
 
 		public Builder initialTimeState(TimeState timeState) {
 			nfModalityStatus.setTimeState(timeState);
 			return this;
 		}
+		
+		public Builder statusTime(float statusTime) {
+			nfModalityStatus.setStatusTime(statusTime);
+			return this;
+		}
 
 		public Builder nfModality(NFModality nfModality) {
-			nfModalityStatus.setModality(Check.nonNull(nfModality, "nfModality"));
+			nfModalityStatus.setModality(Util.nonNull(nfModality, "nfModality"));
 			return this;
 		}
 

@@ -1,0 +1,73 @@
+{
+  "cardsV2": [
+    {
+      "cardId": "1929102019",
+      "card": {
+        "header": {
+          "title": "Alerta SEFAZ",
+          "subtitle": "Um novo evento de <b>${NF_MODALITY:NAME}</b> foi detectado",
+          "imageUrl": "https://i.imgur.com/HcQN9dh.png",
+          "imageType": "CIRCLE",
+          "imageAltText": "Alerta"
+        },
+        "sections": [
+          {
+            "header": "Informações",
+            "collapsible": true,
+            "uncollapsibleWidgetsCount": 2,
+            "widgets": [
+              {
+                "decoratedText": {
+                  "startIcon": {
+                    "knownIcon": "STAR"
+                  },
+                  "text": "Estado: ${ESTADO:EXTENDED}."
+                }
+              },
+              {
+                "decoratedText": {
+                  "startIcon": {
+                    "knownIcon": "CLOCK"
+                  },
+                  "text": "Status: <b><font color=\"${OLD_TIME_STATE:TEXT_COLOR}\">${OLD_TIME_STATE:DISPLAY_NAME}</font></b> para <b><font color=\"${NEW_TIME_STATE:TEXT_COLOR}\">${NEW_TIME_STATE:DISPLAY_NAME}</font></b>."
+                }
+              },
+              {
+                "decoratedText": {
+                  "startIcon": {
+                    "knownIcon": "CONFIRMATION_NUMBER_ICON"
+                  },
+                  "text": "Modelo: ${NF_MODALITY:EXTENDED}."
+                }
+              },
+              {
+                "decoratedText": {
+                  "startIcon": {
+                    "knownIcon": "DESCRIPTION"
+                  },
+                  "text": "Tempo de resposta: ${ESTADO:STATUS_TIME}s."
+                }
+              },
+              {
+                "decoratedText": {
+                  "startIcon": {
+                    "knownIcon": "STORE"
+                  },
+                  "text": "Disponibilidade: <b><font color=\"${NEW_TIME_STATE:TEXT_COLOR}\">${NEW_TIME_STATE:AVAILABILITY}</font></b>."
+                }
+              },
+              {
+                "decoratedText": {
+                  "startIcon": {
+                    "knownIcon": "VIDEO_PLAY"
+                  },
+                  "text": "<h6><i>Versão: ${APPLICATION:VERSION}</i></h6>."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
