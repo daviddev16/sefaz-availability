@@ -1,10 +1,8 @@
-package com.daviddev16.nf;
+package com.daviddev16.core;
 
 public abstract class NfModalityStatusAdapter {
 
-	public abstract void markAsAvailable(NFModality modality);
-	
-	public abstract void markAsUnavailable(NFModality modality);
+	public abstract void setTimeState(NFModality modality, TimeState timeState);
 
 	public abstract NFModalityStatus getStatusBasedOnModality(NFModality nfModality);
 	

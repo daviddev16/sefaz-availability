@@ -1,25 +1,23 @@
-package com.daviddev16.nf;
-
-import com.daviddev16.core.Check;
+package com.daviddev16.core;
 
 public final class NFModalityStatus {
 
 	private NFModality modality;
-	private boolean available;
+	private TimeState timeState;
 
-	private NFModalityStatus(NFModality modality, boolean available) {
+	private NFModalityStatus(NFModality modality, TimeState timeState) {
 		this.modality = modality;
-		this.available = available;
+		this.timeState = timeState;
 	}
 
 	public static NFModalityStatus.Builder create() {
 		return new Builder();
 	}
 
-	public void setAvailable(boolean available) {
-		this.available = available;
+	public void setTimeState(TimeState timeState) {
+		this.timeState = timeState;
 	}
-
+	
 	private void setModality(NFModality modality) {
 		this.modality = modality;
 	}
@@ -28,8 +26,8 @@ public final class NFModalityStatus {
 		return modality;
 	}
 
-	public boolean isAvailable() {
-		return available;
+	public TimeState getTimeState() {
+		return timeState;
 	}
 
 	public static final class Builder {
@@ -37,11 +35,11 @@ public final class NFModalityStatus {
 		private final NFModalityStatus nfModalityStatus;
 
 		public Builder() {
-			nfModalityStatus = new NFModalityStatus(NFModality.NFE, false);
+			nfModalityStatus = new NFModalityStatus(NFModality.NFE, TimeState.DOWN);
 		}
 
-		public Builder initialAvailability(boolean available) {
-			nfModalityStatus.setAvailable(available);
+		public Builder initialTimeState(TimeState timeState) {
+			nfModalityStatus.setTimeState(timeState);
 			return this;
 		}
 

@@ -3,10 +3,6 @@ package com.daviddev16.core;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.daviddev16.nf.Estado;
-import com.daviddev16.nf.NFModality;
-import com.daviddev16.nf.StatusObserver;
-
 public class IntegrationStatusObserver implements StatusObserver {
 
 	private final GoogleIntegrationService integrationService;
@@ -14,9 +10,11 @@ public class IntegrationStatusObserver implements StatusObserver {
 	public IntegrationStatusObserver() {
 		integrationService = new GoogleIntegrationService();
 	}
-
+	
+	/*TODO: TO REIMPLEMENT
 	@Override
-	public void onStatusChanged(NFModality nfModality, Estado estado, boolean newStatus) {
+	public void onStatusChanged(NFModality nfModality, Estado estado, TimeState oldState, TimeState newState) {
+		
 		StringBuilder messageBuilder = new StringBuilder()
 				.append("```")
 				.append("\n")
@@ -31,8 +29,10 @@ public class IntegrationStatusObserver implements StatusObserver {
 				.append("\n")
 				.append("```")
 					.append("<users/all>\n");	
+		
 		getIntegrationService().sendMessage(messageBuilder.toString());
 	}
+	*/
 
 	@Override
 	public boolean alertUnavailabilityOnStart() {
@@ -42,5 +42,8 @@ public class IntegrationStatusObserver implements StatusObserver {
 	public GoogleIntegrationService getIntegrationService() {
 		return integrationService;
 	}
+
+	@Override
+	public void onStatusChanged(NFModality nfModality, Estado changed, TimeState oldState, TimeState newState) {}
 
 }

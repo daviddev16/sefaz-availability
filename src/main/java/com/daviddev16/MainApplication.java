@@ -15,13 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import com.daviddev16.core.Check;
 import com.daviddev16.core.Config;
+import com.daviddev16.core.Estado;
+import com.daviddev16.core.EstadoType;
 import com.daviddev16.core.GoogleIntegrationService;
 import com.daviddev16.core.IntegrationStatusObserver;
 import com.daviddev16.core.MonitorAPI;
-import com.daviddev16.nf.Estado;
-import com.daviddev16.nf.EstadoType;
-import com.daviddev16.nf.NFModality;
-import com.daviddev16.nf.StatusObserver;
+import com.daviddev16.core.NFModality;
+import com.daviddev16.core.StatusObserver;
+import com.daviddev16.core.TimeState;
 
 public class MainApplication {
 
@@ -101,11 +102,9 @@ public class MainApplication {
 				
 				for (NFModality nfModality : NFModality.values()) {
 					
-					LOG.info("Buscando atualizações da modalidade: {}.", nfModality.name());
-					
 					MonitorAPI.fetchAllWorkers(nfModality, (estadoType, status) -> 
 					{
-						boolean currentAvailability = Check.checkIsAvailable(status);
+						TimeState timeState = TimeState.getState(status);
 						Estado estado = estados.get(estadoType);
 
 						if (estado == null) {
@@ -113,10 +112,7 @@ public class MainApplication {
 							estados.put(estadoType, estado);
 						}
 						
-						if (currentAvailability)
-							estado.markAsAvailable(nfModality);
-						else
-							estado.markAsUnavailable(nfModality);
+						estado.setTimeState(nfModality, timeState);
 					
 					});
 				}

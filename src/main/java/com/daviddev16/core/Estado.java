@@ -1,6 +1,6 @@
-package com.daviddev16.nf;
+package com.daviddev16.core;
 
-import com.daviddev16.core.Check;
+import java.awt.Dialog.ModalExclusionType;
 
 public final class Estado extends NfModalityStatusAdapter {
 
@@ -17,30 +17,31 @@ public final class Estado extends NfModalityStatusAdapter {
 		
 		this.nfeStatus = NFModalityStatus.create()
 				.nfModality(NFModality.NFE)
-				.initialAvailability(true)
+				.initialTimeState(TimeState.DOWN)
 				.getNfStatus();
 		
 		if (estadoType.checkNfCompatibility(NFModality.NFCE))
 			this.nfceStatus = NFModalityStatus.create()
 					.nfModality(NFModality.NFCE)
-					.initialAvailability(true)
+					.initialTimeState(TimeState.DOWN)
 					.getNfStatus();
 	}
 	
-	private void changeAvailabilityStatus(NFModality nfModality, 
-										  boolean newAvailabilityStatus) throws ModalityException {
+	private void changeTimeState(NFModality nfModality, 
+							     TimeState newTimeState) throws ModalityException {
 
 		NFModalityStatus modalityStatus = getStatusBasedOnModality(nfModality);
+		TimeState oldTimeState = modalityStatus.getTimeState();
 		
 		if (!isModalityCompatible(nfModality))
 			throw new ModalityException("Essa modalidade de nota fiscal não está disponível "
 					+ "para essa região. ", estadoType, nfModality);
 		
-		if (modalityStatus.isAvailable() != newAvailabilityStatus && getStatusObserver() != null)
-			getStatusObserver().onStatusChanged(nfModality, this, newAvailabilityStatus);
+		if (oldTimeState != newTimeState && getStatusObserver() != null)
+			getStatusObserver().onStatusChanged(nfModality, this, oldTimeState, newTimeState);
 		
-		modalityStatus.setAvailable(newAvailabilityStatus);
-	
+		modalityStatus.setTimeState(newTimeState);
+
 	}
 	
 	@Override
@@ -54,15 +55,10 @@ public final class Estado extends NfModalityStatusAdapter {
 	}
 	
 	@Override
-	public void markAsAvailable(NFModality nfModality) {	
-		changeAvailabilityStatus(nfModality, true);
+	public void setTimeState(NFModality modality, TimeState newTimeState) {
+		changeTimeState(modality, newTimeState);
 	}
-
-	@Override
-	public void markAsUnavailable(NFModality nfModality) {
-		changeAvailabilityStatus(nfModality, false);
-	}
-
+	
 	public StatusObserver getStatusObserver() {
 		return statusObserver;
 	}

@@ -1,4 +1,4 @@
-package com.daviddev16.nf;
+package com.daviddev16.core;
 
 public enum EstadoType {
 

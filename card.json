@@ -1,0 +1,33 @@
+{
+      "cardsV2": [{
+        "cardId": "createCardMessage",
+        "card": {
+          "header": {
+            "title": "A Card Message!",
+            "subtitle": "Created with Chat REST API",
+            "imageUrl": "https://developers.google.com/chat/images/chat-product-icon.png",
+            "imageType": "CIRCLE"
+          },
+          "sections": [
+            {
+              "widgets": [
+                {
+                  "buttonList": {
+                    "buttons": [
+                      {
+                        "text": "Read the docs!",
+                        "onClick": {
+                          "openLink": {
+                            "url": "https://developers.google.com/chat"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }]
+    }
