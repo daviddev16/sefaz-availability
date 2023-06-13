@@ -88,7 +88,7 @@ public final class MainApplication {
 				LOG.info("A chave do webhook e id do espaço foram alterados.");
 				
 			} else {
-				Config.initialize("./internal_services.json");
+				Config.initialize("./services.json");
 			}
 
 			
