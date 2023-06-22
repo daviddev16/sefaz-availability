@@ -40,7 +40,7 @@ public final class Estado extends NfModalityStatusAdapter {
 			throw new ModalityException("Essa modalidade de nota fiscal não está disponível "
 					+ "para essa região. ", estadoType, nfModality);
 		
-		else if (getStatusObserver() == null)
+		if (getStatusObserver() == null)
 			throw new NullPointerException("Nenhum StatusObserver foi associado a essa modalidade.");
 		
 		TimeState oldTimeState = modalityStatus.getTimeState();
