@@ -2,6 +2,10 @@ package com.daviddev16.core;
 
 import static com.daviddev16.util.Util.*;
 
+import java.time.LocalDateTime;
+
+import com.daviddev16.util.Util;
+
 public final class Estado extends NfModalityStatusAdapter {
 
 	private final EstadoType estadoType;
@@ -32,17 +36,29 @@ public final class Estado extends NfModalityStatusAdapter {
 
 		NFModalityStatus modalityStatus = getStatusBasedOnModality(nfModality);
 		
-		TimeState oldTimeState = modalityStatus.getTimeState();
-		
 		if (!isModalityCompatible(nfModality))
 			throw new ModalityException("Essa modalidade de nota fiscal não está disponível "
 					+ "para essa região. ", estadoType, nfModality);
 		
-		if (oldTimeState != newTimeState && getStatusObserver() != null)
+		else if (getStatusObserver() == null)
+			throw new NullPointerException("Nenhum StatusObserver foi associado a essa modalidade.");
+		
+		TimeState oldTimeState = modalityStatus.getTimeState();
+		LocalDateTime lastTimeUpdated = modalityStatus.getLastTimeUpdated();
+		LocalDateTime nowTimeDate = LocalDateTime.now();
+		
+		if (oldTimeState != newTimeState || Util.checkHours(lastTimeUpdated, nowTimeDate, 3))
 			getStatusObserver().onStatusChanged(nfModality, this, oldTimeState, newTimeState, statusTime);
 		
 		modalityStatus.setStatusTime(statusTime);
 		modalityStatus.setTimeState(newTimeState);
+		modalityStatus.setLastTimeUpdated(nowTimeDate);
+
+	}
+	
+	@Override
+	public void setTimeState(NFModality modality, TimeState newTimeState, float statusTime) {
+		changeTimeState(modality, newTimeState, statusTime);
 	}
 	
 	@Override
@@ -53,11 +69,6 @@ public final class Estado extends NfModalityStatusAdapter {
 	@Override
 	public NFModalityStatus getStatusBasedOnModality(NFModality nfModality) {
 		return (nfModality == NFModality.NFCE) ? nfceStatus : nfeStatus;
-	}
-	
-	@Override
-	public void setTimeState(NFModality modality, TimeState newTimeState, float statusTime) {
-		changeTimeState(modality, newTimeState, statusTime);
 	}
 	
 	public StatusObserver getStatusObserver() {

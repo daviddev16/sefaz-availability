@@ -1,5 +1,7 @@
 package com.daviddev16.core;
 
+import java.time.LocalDateTime;
+
 import com.daviddev16.util.Util;
 
 public final class NFModalityStatus {
@@ -7,6 +9,8 @@ public final class NFModalityStatus {
 	private NFModality modality;
 	private TimeState timeState;
 	private float statusTime;
+	/* usado para verificar quanto tempo tem de diferença desde a ultima atualização */
+	private LocalDateTime lastTimeUpdated;
 
 	private NFModalityStatus(NFModality modality, TimeState timeState, float statusTime) {
 		this.modality = modality;
@@ -25,9 +29,17 @@ public final class NFModalityStatus {
 	public void setStatusTime(float statusTime) {
 		this.statusTime = statusTime;
 	}
+
+	public void setLastTimeUpdated(LocalDateTime lastTimeUpdated) {
+		this.lastTimeUpdated = lastTimeUpdated;
+	}
 	
 	private void setModality(NFModality modality) {
 		this.modality = modality;
+	}
+	
+	public LocalDateTime getLastTimeUpdated() {
+		return lastTimeUpdated;
 	}
 
 	public NFModality getModality() {
@@ -48,6 +60,7 @@ public final class NFModalityStatus {
 
 		public Builder() {
 			nfModalityStatus = new NFModalityStatus(NFModality.NFE, TimeState.DOWN, -1);
+			nfModalityStatus.setLastTimeUpdated(LocalDateTime.now());
 		}
 
 		public Builder initialTimeState(TimeState timeState) {

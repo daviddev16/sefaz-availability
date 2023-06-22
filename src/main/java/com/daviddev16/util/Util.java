@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Util {
 
@@ -22,6 +24,11 @@ public class Util {
 			builder.append(line).append('\n');
 		}
 		return builder.toString();
+	}
+
+	/*TODO: Adicionar card novo apenas para avisar que já tem um periodo de tempo muito grande */
+	public static boolean checkHours(LocalDateTime start, LocalDateTime now, int hours) {
+		return Duration.between(start, now).equals(Duration.ofHours(hours));
 	}
 	
 	public static InputStream getResourceAsStream(String name) {
