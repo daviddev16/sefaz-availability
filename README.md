@@ -23,3 +23,23 @@ Esse projeto foi desenvolvido no ``Eclipse`` e ``Temurin JDK-11.0.18.10`` com as
 - ``org.slf4j-api:1.7.6``
 - ``org.slf4j-log4j12:1.7.5``
 - ``commons-cli:1.5.0``
+
+- # Build e Run
+
+Serviço utiliza o maven com o shade plugin para a criação do arquivo jar. Use o comando abaixo para a criação do pacote jar:
+``mvn clean package``
+
+### Rodando como docker container
+
+```shell
+cd sefaz-availability-core
+docker build daviddev16/disponibilidade-sefaz .
+```
+
+### Rodando como aplicação java
+
+```shell
+cd sefaz-availability-core
+mvn clean package
+java -jar /target/disponibilidade-sefaz-0.0.1-SNAPSHOT.jar --space-id="<space-id>" --webhook-key="<key>" --fetch-time=6
+```
