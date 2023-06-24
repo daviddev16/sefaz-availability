@@ -44,6 +44,12 @@ public class IntegrationStatusObserver implements StatusObserver {
 	}
 	
 	@Override
+	public void onCriticalStatus(NFModality nfModality, Estado estado, TimeState criticalState, float statusTime) {
+		// TODO: Adicionar card customizado para estado critico
+		onStatusChanged(nfModality, estado, criticalState, criticalState, statusTime);
+	}
+	
+	@Override
 	public void onEnabled() {
 		final String bannerCardJson = Config.get(Config.INTERNAL_BANNER_CARD_CONTENT);
 		getGoogleChatSpace().sendJson(bannerCardJson);

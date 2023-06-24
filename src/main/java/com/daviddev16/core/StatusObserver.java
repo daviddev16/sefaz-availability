@@ -11,7 +11,12 @@ public interface StatusObserver {
 	 * Evento que dispara quando houver uma troca de estado no modelo de nota 
 	 * fiscal relacionado ao evento.
 	 **/
-	void onStatusChanged( NFModality nfModality, Estado changed, TimeState oldState, TimeState newState, float statusTime );
+	void onStatusChanged( NFModality nfModality, Estado estado, TimeState oldState, TimeState newState, float statusTime );
+	
+	/**
+	 * Evento dispara quando a modalidade fica mais de um periodo de tempo em estado DOWN ou TIMEOUT
+	 **/
+	void onCriticalStatus( NFModality nfModality, Estado estado, TimeState criticalState, float statusTime  );
 
 	/**
 	 * Executar onStatusChanged() caso ao iniciar classe, a disponibilidade

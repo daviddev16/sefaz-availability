@@ -26,7 +26,6 @@ public class Util {
 		return builder.toString();
 	}
 
-	/*TODO: Adicionar card novo apenas para avisar que já tem um periodo de tempo muito grande */
 	public static boolean checkHours(LocalDateTime start, LocalDateTime now, int hours) {
 		return Duration.between(start, now).equals(Duration.ofHours(hours));
 	}

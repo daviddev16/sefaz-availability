@@ -11,11 +11,13 @@ public enum TimeState {
 	private String displayName;
 	private String availability;
 	private String hexColor;
+	private float time;
 	
 	private TimeState(float time, String displayName, String availability, String hexColor) {
 		this.displayName = displayName;
 		this.availability = availability;
 		this.hexColor = hexColor;
+		this.time = time;
 	}
 
 	/* TODO: arrumar depois */
@@ -32,12 +34,16 @@ public enum TimeState {
 		return TIMEOUT;
 	}
 	
+	public String getDisplayName() {
+		return displayName.toUpperCase();
+	}
+	
 	public String getAvailability() {
 		return availability;
 	}
 
-	public String getDisplayName() {
-		return displayName.toUpperCase();
+	public float getTime() {
+		return time;
 	}
 	
 	public String getHexColor() {

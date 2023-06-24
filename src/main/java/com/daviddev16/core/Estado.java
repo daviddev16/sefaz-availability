@@ -46,13 +46,25 @@ public final class Estado extends NfModalityStatusAdapter {
 		TimeState oldTimeState = modalityStatus.getTimeState();
 		LocalDateTime lastTimeUpdated = modalityStatus.getLastTimeUpdated();
 		LocalDateTime nowTimeDate = LocalDateTime.now();
+
 		
-		if (oldTimeState != newTimeState || Util.checkHours(lastTimeUpdated, nowTimeDate, 3))
+		if (newTimeState.getTime() >= TimeState.TIMEOUT.getTime()) {
+
+			if (oldTimeState.getTime() >= TimeState.TIMEOUT.getTime() && Util.checkHours(lastTimeUpdated, nowTimeDate, 4)) {
+				getStatusObserver().onCriticalStatus(nfModality, this, newTimeState, statusTime);
+				modalityStatus.setLastTimeUpdated(nowTimeDate);
+			}
+			
+			if (oldTimeState.getTime() < TimeState.TIMEOUT.getTime())
+				modalityStatus.setLastTimeUpdated(nowTimeDate);
+		
+		}
+		
+		if (oldTimeState != newTimeState)
 			getStatusObserver().onStatusChanged(nfModality, this, oldTimeState, newTimeState, statusTime);
-		
+
 		modalityStatus.setStatusTime(statusTime);
 		modalityStatus.setTimeState(newTimeState);
-		modalityStatus.setLastTimeUpdated(nowTimeDate);
 
 	}
 	
