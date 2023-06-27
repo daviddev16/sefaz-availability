@@ -35,8 +35,10 @@ Serviço utiliza o maven com o shade plugin para a criação do arquivo jar. Use
 É importante editar o Dockerfile com os parâmetros corretos para rodar a aplicação.
 
 ```shell
+git clone https://github.com/daviddev16/sefaz-availability-core
 cd sefaz-availability-core
 docker build daviddev16/disponibilidade-sefaz .
+docker run -d daviddev16/disponibilidade-sefaz 
 ```
 
 ### Rodando como aplicação java
