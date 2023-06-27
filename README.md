@@ -27,6 +27,7 @@ Esse projeto foi desenvolvido no ``Eclipse`` e ``Temurin JDK-11.0.18.10`` com as
 - # Build e Run
 
 Serviço utiliza o maven com o shade plugin para a criação do arquivo jar. Use o comando abaixo para a criação do pacote jar:
+
 ``mvn clean package``
 
 ### Rodando como docker container
